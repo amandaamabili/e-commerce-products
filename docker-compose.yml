@@ -1,0 +1,73 @@
+version: "3.7"
+
+services:
+    # image project
+    app:
+        container_name: products-laravel
+        build:
+            args:
+                user: amanda
+                uid: 1000
+            context: .
+            dockerfile: Dockerfile
+        image: especializati/laravel-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - redis
+        networks:
+            - laravel
+
+    # nginx
+    nginx:
+        container_name: products-nginx
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "8989:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - laravel
+
+    # db mongo
+    db-mongo:
+        container_name: products-mongo
+        image: mongo:latest
+        command: mongod --port 27018
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+        ports:
+            - "27018:27018"
+        networks:
+            - laravel
+
+    # queue
+    queue:
+        container_name: products-queue
+        image: especializati/laravel-app
+        restart: unless-stopped
+        command: "php artisan queue:work"
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - redis
+           # - app
+        networks:
+            - laravel
+
+    # redis
+    redis:
+        container_name: products-redis
+        image: redis:latest
+        networks:
+            - laravel
+
+networks:
+    laravel:
+        driver: bridge
