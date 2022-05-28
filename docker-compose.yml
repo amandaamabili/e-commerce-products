@@ -34,7 +34,7 @@ services:
             - laravel
 
     # db mongo
-    db-mongo:
+    mongodb:
         container_name: products-mongo
         image: mongo:latest
         command: mongod --port 27018
@@ -47,6 +47,22 @@ services:
         networks:
             - laravel
 
+    # db mysql
+    mysql:
+        container_name: especializati-mysql
+        image: mysql:5.7.22
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes:
+            - ./.docker/mysql/dbdata:/var/lib/mysql
+        ports:
+            - "3388:3306"
+        networks:
+            - laravel
     # queue
     queue:
         container_name: products-queue
