@@ -60,9 +60,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUpdateProduct $request, $identify)
     {
-        //
+        $this->productService->updateProduct($identify, $request->validated());
+        return  response()->json(['message'=> 'updated']);
     }
 
     /**

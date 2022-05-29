@@ -24,6 +24,10 @@ class ProductService {
         return $this->repository->getProductById($identify);
     }
 
+    public function updateProduct(string $identify, array $data){
+        return $this->repository->updateProduct($identify, $data);
+    }
+
     public function  deleteProduct(string $identify){
 
         return $this->repository->deleteProductById($identify);
