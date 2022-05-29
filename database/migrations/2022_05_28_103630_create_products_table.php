@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->float('sugest_price');
             $table->enum('category',['tecnology', 'house', 'culture_and_hoby', 'style_and_wellness', 'baby_and_child', 'auto', 'electronic'])->nullable();
             $table->string('brand');
