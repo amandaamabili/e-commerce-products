@@ -23,8 +23,9 @@ class StoreUpdateProduct extends FormRequest
      */
     public function rules()
     {
+        $id = $this->product ?? '';
         return [
-            'name' => ['required', 'min:3', 'max:255', 'unique:products'],
+            'name' => ['required', 'min:3', 'max:255', "unique:products,name,{$id},id"],
             'sugest_price' => ['required',   'min:3', 'max:9999'],
             'category' => ['nullable', 'min:2', 'max:255'],
             'brand' => ['min:2', 'max:255'],

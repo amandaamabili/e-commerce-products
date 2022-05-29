@@ -22,8 +22,15 @@ class ProductRepository
     public function  getProductById(string $identify){
         return $this->entity->where('id', $identify)->firstOrFail();
     }
+
+    public function  updateProduct(string $identify, array $data){
+        $product = $this->getProductById($identify);
+        return $product->update($data);
+    }
+
+
     public function  deleteProductById(string $identify){
-      $course =  $this->entity->where('id', $identify)->firstOrFail();
-     return $course->delete($identify);
+      $product =  $this->entity->where('id', $identify)->firstOrFail();
+     return $product->delete($identify);
     }
 }
