@@ -38,7 +38,6 @@ class ProductController extends Controller
     {
             $products =  $this->productService->createNewProduct($request->validated());
             return new ProductResource($products);
-
     }
 
     /**
