@@ -11,9 +11,8 @@ services:
             context: .
             dockerfile: Dockerfile
         image: especializati/laravel-app
-        restart: unless-stopped
+        restart: always
         working_dir: /var/www/
-        command: "php artisan db:seed --class=ProductSeeder"
         volumes:
             - ./:/var/www
         depends_on:

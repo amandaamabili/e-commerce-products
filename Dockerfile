@@ -33,7 +33,14 @@ RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
+#CMD php artisan migrate
+#CMD php artisan db:seed --class=ProductSeeder
+
 # Set working directory
 WORKDIR /var/www
 
+#COPY ./docker-entrypoint.sh /tmp
+#ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
+
 USER $user
+
