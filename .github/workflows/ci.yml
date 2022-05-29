@@ -1,6 +1,6 @@
-on: push
-#  pull_request:
-#    branches: [ develop ]
+on:
+  pull_request:
+    branches: [ develop ]
 name: CI
 jobs:
   phpunit:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Install composer dependencies
         run: |
-          composer install --ignore-platform-reqs
+          composer update --ignore-platform-reqs
 
       - name: Prepare Laravel Application
         run: |
