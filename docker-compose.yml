@@ -13,11 +13,12 @@ services:
         image: especializati/laravel-app
         restart: unless-stopped
         working_dir: /var/www/
+        command: "php artisan db:seed --class=ProductSeeder"
         volumes:
             - ./:/var/www
         depends_on:
             - redis
-            #- queue
+            - mysql
         networks:
             - laravel
 
