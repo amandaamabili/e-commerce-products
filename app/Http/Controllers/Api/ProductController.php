@@ -37,6 +37,7 @@ class ProductController extends Controller
     public function store(StoreUpdateProduct $request)
     {
             $products =  $this->productService->createNewProduct($request->validated());
+
             return new ProductResource($products);
 
     }
