@@ -1,6 +1,6 @@
-on:
-  pull_request:
-    branches: [ develop ]
+on: push
+#  pull_request:
+#    branches: [ develop ]
 name: CI
 jobs:
   phpunit:
