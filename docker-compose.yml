@@ -4,19 +4,18 @@ services:
     # image project
     api-cache:
         container_name: products-laravel
-        build:
-            args:
-                user: amanda
-                uid: 1000
-            context: .
-            dockerfile: Dockerfile
-        image: especializati/laravel-app
+#        build:
+#            args:
+#                user: amanda
+#                uid: 1000
+#            context: .
+#            dockerfile: Dockerfile
+        image: amandaamabili/products-ecommerce
         restart: always
         working_dir: /var/www/
         volumes:
             - ./:/var/www
         depends_on:
-            - redis
             - mysql
         networks:
             - laravel
