@@ -1,8 +1,8 @@
 FROM php:8.0-fpm
 
 # Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+ARG user=amanda
+ARG uid=1000
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -38,7 +38,7 @@ RUN pecl install -o -f redis \
 
 # Set working directory
 WORKDIR /var/www
-
+COPY  . /var/www
 #COPY ./docker-entrypoint.sh /tmp
 #ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
 

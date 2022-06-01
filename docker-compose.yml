@@ -4,20 +4,15 @@ services:
     # image project
     api-cache:
         container_name: products-laravel
-#        build:
-#            args:
-#                user: amanda
-#                uid: 1000
-#            context: .
-#            dockerfile: Dockerfile
-        image: amandaamabili/products-ecommerce
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: amandaamabili/products-ecommerce:1.0
         restart: always
         working_dir: /var/www/
-#        command: "php artisan db:seed --class=ProductSeeder"
         volumes:
             - ./:/var/www
         depends_on:
-#            - redis
             - mysql
         networks:
             - laravel
