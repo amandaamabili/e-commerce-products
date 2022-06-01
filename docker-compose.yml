@@ -2,77 +2,84 @@ version: "3.7"
 
 services:
     # image project
-    api-cache:
+    app:
         container_name: products-laravel
-#        build:
-#            args:
-#                user: amanda
-#                uid: 1000
-#            context: .
-#            dockerfile: Dockerfile
-        image: amandaamabili/products-ecommerce
-        restart: always
-        working_dir: /var/www/
-#        command: "php artisan db:seed --class=ProductSeeder"
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: amandaamabili/product-ecommerce:3.0
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
         volumes:
-            - ./:/var/www
-        depends_on:
-#            - redis
-            - mysql
+             - ./:/var/www
+             - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
-            - laravel
+            - laravel-9
 
     # nginx
     nginx:
         container_name: products-nginx
         image: nginx:alpine
         restart: unless-stopped
+        tty: true
         ports:
             - "8989:80"
+            - "443:443"
         volumes:
             - ./:/var/www
-            - ./docker/nginx/:/etc/nginx/conf.d/
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
         networks:
-            - laravel
+            - laravel-9
 
-    # db mysql
+    # db mysql images
     mysql:
         container_name: products-mysql
         image: mysql:5.7.22
         restart: unless-stopped
+        tty: true
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_USER: ${DB_USERNAME}
-        volumes:
-            - ./.docker/mysql/dbdata:/var/lib/mysql
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
         ports:
             - "3388:3306"
-        networks:
-            - laravel
-
-    # queue
-    queue:
-        container_name: products-queue
-        image: especializati/laravel-app
-        restart: unless-stopped
-        command: "php artisan queue:work"
         volumes:
-            - ./:/var/www
-        depends_on:
-            - redis
-#            - app
+            - dbdata:/var/lib/mysql/
+            - ./mysql/my.cnf:/etc/mysql/my.cnf
         networks:
-            - laravel
+            - laravel-9
+
+    # # queue
+    # queue:
+    #     container_name: products-queue-dash
+    #     image: amandaamabili/laravel9-app
+    #     restart: unless-stopped
+    #     command: "php artisan queue:work"
+    #     volumes:
+    #         - ./:/var/www
+    #     depends_on:
+    #         - redis
+    #         - app
+    #     networks:
+    #         - laravel-9
 
     # redis
     redis:
         container_name: products-redis
         image: redis:latest
         networks:
-            - laravel
+            - laravel-9
 
 networks:
-    laravel:
+    laravel-9:
         driver: bridge
+volumes:
+  dbdata:
+    driver: local
